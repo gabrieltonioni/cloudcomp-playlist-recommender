@@ -40,6 +40,19 @@ docker push $image_name:$new_version
 # Update the version in the corresponding yaml file based on the image name
 if [ "$image_name" == "gabrieltonioni/rules-generator" ]; then
     sed -i "s|$image_name:$current_version|$image_name:$new_version|" ./k8s/job.yaml
+    # Calculate the hash of the file content
+    content_hash=$(sha256sum ./k8s/job.yaml | awk '{ print $1 }')
+    # Truncate the hash to the first 10 characters
+    truncated_hash=${content_hash:0:10}
+    # Define the base job name
+    base_job_name="gabrielduarte-recommender-job"
+    # Ensure the total job name length does not exceed 63 characters
+    max_base_job_name_length=$((63 - ${#truncated_hash} - 1)) # Subtract 1 for the hyphen
+    if [ ${#base_job_name} -gt $max_base_job_name_length ]; then
+    base_job_name=${base_job_name:0:$max_base_job_name_length}
+    fi
+    # Use sed to update the job name in the yaml file
+    sed -i "s|name: gabrielduarte-recommender-job|name: $base_job_name-$truncated_hash|g" ./k8s/job.yaml
 elif [ "$image_name" == "gabrieltonioni/playlists-recommender" ]; then
     sed -i "s|$image_name:$current_version|$image_name:$new_version|" ./k8s/deployment.yaml
 fi
