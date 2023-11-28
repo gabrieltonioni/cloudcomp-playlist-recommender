@@ -13,13 +13,13 @@ def read_model_date(filename):
         data = json.load(f)
     return data["model_date"]
 
-def monitor_file(filename):
+def monitor_file(filename, ip_address, dataset_url):
     songs = ["HUMBLE.", "T-Shirt", "XO TOUR Llif3"]
-    send_request(songs, args.ip)
+    send_request(songs, ip_address)
     last_model_date = read_model_date(filename)
 
     script = "cloudcomp-playlist-recommender/update_dataset_and_push.sh"
-    args = [args.dsurl]
+    args = [dataset_url]
     subprocess.run(["/bin/bash", "-c", script] + args)
 
     start_time = time.time()
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if(args.dsurl):
-        monitor_file("response.out")
+        monitor_file("response.out", args.ip, args.dsurl)
     else:
         songs = ["HUMBLE.", "T-Shirt", "XO TOUR Llif3"]
         send_request(songs, args.ip)
