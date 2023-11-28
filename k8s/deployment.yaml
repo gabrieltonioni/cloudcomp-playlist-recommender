@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gabrielduarte-recommender-deployment-9cd1fe93ee
+  name: gabrielduarte-recommender-deployment-c3115bf447
 spec:
   replicas: 2
   selector:
