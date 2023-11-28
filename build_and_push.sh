@@ -40,11 +40,14 @@ docker build -t $image_name:$new_version $build_directory
 # Push the Docker image to the registry
 docker push $image_name:$new_version
 
-# Update the version in the yaml files
-sed -i "s/$image_name:$current_version/$image_name:$new_version/" $deployment_yaml
-sed -i "s/$image_name:$current_version/$image_name:$new_version/" $job_yaml
+# Update the version in the corresponding yaml file based on the image name
+if [ "$image_name" == "gabrieltonioni/rules-generator" ]; then
+    sed -i "s/$image_name:$current_version/$image_name:$new_version/" $job_yaml
+elif [ "$image_name" == "gabrieltonioni/playlists-recommender" ]; then
+    sed -i "s/$image_name:$current_version/$image_name:$new_version/" $deployment_yaml
+fi
 
 # Push changes to github
 git add .
-git commit -m "Bumped $build_directory/Dockerfile to $new_version"
-git push origin master
+git commit -m "Bumped $image_name to $new_version"
+git push -u origin master
