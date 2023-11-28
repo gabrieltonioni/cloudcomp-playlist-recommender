@@ -29,7 +29,7 @@ fi
 new_version="${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 
 # Update the version in the Dockerfile
-sed -i "s/ENV IMAGE_VERSION=$current_version/ENV IMAGE_VERSION=$new_version/" $build_directory/Dockerfile
+sed -i "s|ENV IMAGE_VERSION=$current_version|ENV IMAGE_VERSION=$new_version|" $build_directory/Dockerfile
 
 # Build the Docker image
 docker build -t $image_name:$new_version $build_directory
@@ -39,9 +39,9 @@ docker push $image_name:$new_version
 
 # Update the version in the corresponding yaml file based on the image name
 if [ "$image_name" == "gabrieltonioni/rules-generator" ]; then
-    sed -i "s/$image_name:$current_version/$image_name:$new_version/" ./k8s/job.yaml
+    sed -i "s|$image_name:$current_version|$image_name:$new_version|" ./k8s/job.yaml
 elif [ "$image_name" == "gabrieltonioni/playlists-recommender" ]; then
-    sed -i "s/$image_name:$current_version/$image_name:$new_version/" ./k8s/deployment.yaml
+    sed -i "s|$image_name:$current_version|$image_name:$new_version|" ./k8s/deployment.yaml
 fi
 
 # Push changes to github
