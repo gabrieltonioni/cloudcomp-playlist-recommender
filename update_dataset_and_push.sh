@@ -31,8 +31,8 @@ if [ ${#base_job_name} -gt $max_base_name_length ]; then
 fi
 
 # Update the names in the deployment and job files
-sed -i "s|name: $base_deployment_name|name: $base_deployment_name-$truncated_hash|g" ./k8s/deployment.yaml
-sed -i "s|name: $base_job_name|name: $base_job_name-$truncated_hash|g" ./k8s/job.yaml
+sed -i "s|name: $base_deployment_name-\?.*|name: $base_deployment_name-$truncated_hash|g" ./k8s/deployment.yaml
+sed -i "s|name: $base_job_name-\?.*|name: $base_job_name-$truncated_hash|g" ./k8s/job.yaml
 
 # Push changes to github
 git add .

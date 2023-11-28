@@ -52,7 +52,7 @@ if [ "$image_name" == "gabrieltonioni/rules-generator" ]; then
     base_job_name=${base_job_name:0:$max_base_job_name_length}
     fi
     # Use sed to update the job name in the yaml file
-    sed -i "s|name: gabrielduarte-recommender-job|name: $base_job_name-$truncated_hash|g" ./k8s/job.yaml
+    sed -i "s|name: $base_job_name-\?.*|name: $base_job_name-$truncated_hash|g" ./k8s/job.yaml
 elif [ "$image_name" == "gabrieltonioni/playlists-recommender" ]; then
     sed -i "s|$image_name:$current_version|$image_name:$new_version|" ./k8s/deployment.yaml
 fi
