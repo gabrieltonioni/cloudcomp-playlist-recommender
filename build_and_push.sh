@@ -43,3 +43,8 @@ docker push $image_name:$new_version
 # Update the version in the yaml files
 sed -i "s/$image_name:$current_version/$image_name:$new_version/" $deployment_yaml
 sed -i "s/$image_name:$current_version/$image_name:$new_version/" $job_yaml
+
+# Push changes to github
+git add .
+git commit -m "Bumped $build_directory/Dockerfile to $new_version"
+git push origin master
