@@ -11,9 +11,6 @@ image_name=$1
 build_directory=$2
 version_type=$3
 
-deployment_yaml="./k8s/deployment.yaml"
-job_yaml="./k8s/job.yaml"
-
 # Get the current version from the Dockerfile
 current_version=$(grep "ENV IMAGE_VERSION" $build_directory/Dockerfile | cut -d'=' -f2)
 
@@ -42,9 +39,9 @@ docker push $image_name:$new_version
 
 # Update the version in the corresponding yaml file based on the image name
 if [ "$image_name" == "gabrieltonioni/rules-generator" ]; then
-    sed -i "s/$image_name:$current_version/$image_name:$new_version/" $job_yaml
+    sed -i "s/$image_name:$current_version/$image_name:$new_version/" ./k8s/job.yaml
 elif [ "$image_name" == "gabrieltonioni/playlists-recommender" ]; then
-    sed -i "s/$image_name:$current_version/$image_name:$new_version/" $deployment_yaml
+    sed -i "s/$image_name:$current_version/$image_name:$new_version/" ./k8s/deployment.yaml
 fi
 
 # Push changes to github
