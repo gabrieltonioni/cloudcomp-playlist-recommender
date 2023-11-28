@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: recommender-container
-        image: gabrieltonioni/playlists-recommender:0.0.3
+        image: gabrieltonioni/playlists-recommender:0.0.4
         env:
           - name: DS_URL
             valueFrom:

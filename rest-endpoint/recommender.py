@@ -42,20 +42,20 @@ def playlists_recommendation(client_songs):
     playlists = pd.read_csv(url)
 
     # Recover songs unique identifiers from their names
-    song_uris = playlists[playlists['track_name'].isin(client_songs)]['track_uri'].drop_duplicates().tolist()
+    song_uris = playlists[playlists["track_name"].isin(client_songs)]["track_uri"].drop_duplicates().tolist()
 
     # One-hot encoding of playlists dataframe
-    playlists['value'] = 1
-    playlists = playlists.pivot_table(index='pid', columns='track_uri', values='value', fill_value=0)
+    playlists["value"] = 1
+    playlists = playlists.pivot_table(index="pid", columns="track_uri", values="value", fill_value=0)
     playlists = playlists.astype(bool)
     
-    applicable_rules = rules[rules['antecedents'].apply(lambda x: set(x).issubset(set(song_uris)))]
-    recommended_songs = list(set().union(*applicable_rules['consequents']))
+    applicable_rules = rules[rules["antecedents"].apply(lambda x: set(x).issubset(set(song_uris)))]
+    recommended_songs = list(set().union(*applicable_rules["consequents"]))
     recommended_playlists = playlists[playlists[recommended_songs].any(axis=1).tolist()].index.tolist()
 
     return recommended_playlists
 
-@app.route('/api/recommend', methods=["POST"])
+@app.route("/api/recommend", methods=["POST"])
 def recommend():
     """
     This endpoint responds to playlist recommendation requests
@@ -73,5 +73,5 @@ def recommend():
                     "model_date": model_date}), 201
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(host="0.0.0.0")
