@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: gabrielduarte-recommender-job-9cd1fe93ee
+  name: gabrielduarte-recommender-job-c3115bf447
 spec:
   template:
     spec:
