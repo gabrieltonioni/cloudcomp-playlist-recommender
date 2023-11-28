@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: gabrielduarte-recommender-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: rules-container
+        image: gabrieltonioni/rules-generator:0.0.1
+        env:
+          - name: DS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: gabrielduarte-recommender-configmap
+                key: DS_URL
+        volumeMounts:
+        - mountPath: /ml-data
+          name: rules-volume
+      volumes:
+      - name: rules-volume
+        persistentVolumeClaim:
+          claimName: gabrielduarte-recommender-pvc
+      restartPolicy: OnFailure

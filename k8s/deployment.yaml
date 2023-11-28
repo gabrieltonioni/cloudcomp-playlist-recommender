@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gabrielduarte-recommender-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gabrielduarte-recommender
+  template:
+    metadata:
+      labels:
+        app: gabrielduarte-recommender
+    spec:
+      containers:
+      - name: recommender-container
+        image: gabrieltonioni/playlists-recommender:0.0.3
+        env:
+          - name: DS_URL
+            valueFrom:
+              configMapKeyRef:
+                name: gabrielduarte-recommender-configmap
+                key: DS_URL
+        volumeMounts:
+        - mountPath: /ml-data
+          name: rules-volume
+          readOnly: true
+        ports:
+        - containerPort: 5000
+      volumes:
+      - name: rules-volume
+        persistentVolumeClaim:
+          claimName: gabrielduarte-recommender-pvc

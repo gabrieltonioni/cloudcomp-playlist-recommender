@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  namespace: gabrielduarte
+  name: gabrielduarte-recommender-pvc
+spec:
+  volumeName: project2-pv-gabrielduarte
+  storageClassName: standard
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
