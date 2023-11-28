@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: gabrielduarte-recommender-configmap
 data:
-  DS_URL: "https://homepages.dcc.ufmg.br/~cunha/hosted/cloudcomp-2023s2-datasets/2023_spotify_ds1.csv"
+  DS_URL: "https://homepages.dcc.ufmg.br/~cunha/hosted/cloudcomp-2023s2-datasets/2023_spotify_ds2.csv"

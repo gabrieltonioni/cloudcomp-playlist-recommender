@@ -14,23 +14,27 @@ def read_model_date(filename):
     return data["model_date"]
 
 def monitor_file(filename, ip_address, dataset_url):
-    songs = ["HUMBLE.", "T-Shirt", "XO TOUR Llif3"]
-    send_request(songs, ip_address)
-    last_model_date = read_model_date(filename)
+    # songs = ["HUMBLE.", "T-Shirt", "XO TOUR Llif3"]
+    # send_request(songs, ip_address)
+    # last_model_date = read_model_date(filename)
 
-    script = "cloudcomp-playlist-recommender/update_dataset_and_push.sh"
+    script = "./update_dataset_and_push.sh"
     args = [dataset_url]
-    subprocess.run(["/bin/bash", "-c", script] + args)
+    command = f"{script} {' '.join(args)}"
+    process = subprocess.Popen(["/bin/bash", "-c", command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for line in iter(process.stdout.readline, b''):
+        print(line.decode('utf-8'), end='')
+    process.wait()
 
-    start_time = time.time()
-    # sync_app("gabrielduarte-playlist-recommender")
-    while True:
-        current_model_date = read_model_date(filename)
-        if current_model_date != last_model_date:
-            break
-        send_request(songs, args.ip)
-    end_time = time.time()
-    print(f"The script ran for {end_time - start_time} seconds.")
+    # start_time = time.time()
+    # # sync_app("gabrielduarte-playlist-recommender")
+    # while True:
+    #     current_model_date = read_model_date(filename)
+    #     if current_model_date != last_model_date:
+    #         break
+    #     send_request(songs, ip_address)
+    # end_time = time.time()
+    # print(f"The script ran for {end_time - start_time} seconds.")
 
 def send_request(songs, ip_address):
     url = f"http://{ip_address}:32184/api/recommend"
